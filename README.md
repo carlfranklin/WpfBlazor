@@ -14,6 +14,8 @@ Once I got it all working, I expanded it by including the following features:
 - Calling Wpf Windows from Razor components
 - Including third party Blazor components
 - Handling Cascading Parameters
+- Adding an _Imports.razor file
+- Adding global using statements to App.xaml.cs
 
 Feel free to add pull requests to make this demo bigger and keep it current!
 
