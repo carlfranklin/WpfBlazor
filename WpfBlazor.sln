@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.2.32210.308
+VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBlazor", "WpfBlazor\WpfBlazor.csproj", "{C97EDECC-0B72-4732-8232-DD9F943C21E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBlazor", "WpfBlazor\WpfBlazor.csproj", "{32FA8E4A-B5A7-441F-815C-6B96814E282F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C97EDECC-0B72-4732-8232-DD9F943C21E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C97EDECC-0B72-4732-8232-DD9F943C21E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C97EDECC-0B72-4732-8232-DD9F943C21E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C97EDECC-0B72-4732-8232-DD9F943C21E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32FA8E4A-B5A7-441F-815C-6B96814E282F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32FA8E4A-B5A7-441F-815C-6B96814E282F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32FA8E4A-B5A7-441F-815C-6B96814E282F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32FA8E4A-B5A7-441F-815C-6B96814E282F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {8CA081F0-2DCD-49F4-85FC-9891A65C3414}
+		SolutionGuid = {D83D8FA1-D860-48F1-AD1B-9F45CB6EFB29}
 	EndGlobalSection
 EndGlobal

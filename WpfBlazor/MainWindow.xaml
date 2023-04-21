@@ -18,7 +18,7 @@
         <blazor:BlazorWebView     
                 Grid.Row="1"
                 HostPage="wwwroot/index.html" 
-                Services="{StaticResource services}">
+                Services="{DynamicResource services}">
             <blazor:BlazorWebView.RootComponents>
                 <blazor:RootComponent Selector="#app" ComponentType="{x:Type local:Index}" />
             </blazor:BlazorWebView.RootComponents>
