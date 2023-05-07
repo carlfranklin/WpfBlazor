@@ -286,7 +286,7 @@ Run the app. It doesn't do much yet, but we'll get there.
 
 ### Call into JavaScript
 
-Add the following to *wwwroot/index.html* at line 22:
+Add the following to *wwwroot/index.html* before line 22:
 
 ```html
 <script>
@@ -613,7 +613,7 @@ We're going to add the Blazor Extensions Canvas component to the project. This g
 
 The repo for this component is at https://github.com/BlazorExtensions/Canvas but you can add the package via NuGet at https://www.nuget.org/packages/Blazor.Extensions.Canvas
 
-After installing it, your *WpfBlazor.csproj* file should look like this (minus the comments):
+After installing it, your *WpfBlazor.csproj* file should look like this:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk.Razor">
@@ -687,6 +687,8 @@ protected override async Task OnAfterRenderAsync(bool firstRender)
     await _context.StrokeTextAsync("Hello Blazor!!!", 10, 100);
 }
 ```
+
+This is essentially the sample code from the Blazor Canvas repo. The point is that you can install and use any Blazor components you like, and access them just like you would in a Blazor app, but it's WPF!!
 
 Run the app. It should look something like this:
 
@@ -773,6 +775,8 @@ public partial class DisplayMessage : ComponentBase
 }
 ```
 
+This is essentially demo code taken from the Blazored Modal repo.
+
 Replace *Index.razor* with the following:
 
 ```html
@@ -813,13 +817,15 @@ Run the app and press the **Show Modal** button. It should look like this:
 
 ### Call WPF Code from Blazor
 
-We've learned how to call Blazor code from a XAML interaction, now let's call C# code in a XAML code-behind from Blazor.
+We've learned how to call Blazor code from a XAML interaction, now let's call C# code in a XAML code-behind file from Blazor.
 
 Add the following property to *AppState.cs*:
 
 ```c#
 public static MainWindow MainWindow {get;set;}
 ```
+
+Just as with the `Index.razor` component, we need a reference to the `MainWindow` object we're going to access.
 
 Replace *MainWindow.xaml.cs* with the following:
 
