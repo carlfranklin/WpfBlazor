@@ -24,18 +24,6 @@ public partial class Index
         Message = $"Message updated at {DateTime.Now.ToLongTimeString()} Window Width: {width}";
     }
 
-    public void ShowModal()
-    {
-        var parameters = new ModalParameters();
-        parameters.Add(nameof(DisplayMessage.Message), "Hey, WPF!");
-        Modal.Show<DisplayMessage>("Passing Data", parameters);
-    }
-
-    protected void TalkToWPF()
-    {
-        AppState.MainWindow?.ShowMessageBox("Hey, this is Blazor Calling!");
-    }
-
     protected override void OnInitialized()
     {
         AppState.IndexComponent = this;
@@ -45,15 +33,16 @@ public partial class Index
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("RegisterWPFApp", DotNetObjectReference.Create(this));
+            await JSRuntime.InvokeVoidAsync("RegisterWPFApp",
+               DotNetObjectReference.Create(this));
         }
-        this._context = await this._canvasReference.CreateCanvas2DAsync();
-        await this._context.SetFillStyleAsync("green");
+        _context = await _canvasReference.CreateCanvas2DAsync();
+        await _context.SetFillStyleAsync("green");
 
-        await this._context.FillRectAsync(10, 100, 100, 100);
+        await _context.FillRectAsync(10, 100, 100, 100);
 
-        await this._context.SetFontAsync("48px serif");
-        await this._context.StrokeTextAsync("Hello Blazor!!!", 10, 100);
+        await _context.SetFontAsync("48px serif");
+        await _context.StrokeTextAsync("Hello Blazor!!!", 10, 100);
     }
 
     [JSInvokable]
@@ -61,5 +50,16 @@ public partial class Index
     {
         Message = $"Screen Size: {Width} x {Height}";
         await InvokeAsync(StateHasChanged);
+    }
+
+    public void ShowModal()
+    {
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(DisplayMessage.Message), "Hey, WPF!");
+        Modal.Show<DisplayMessage>("Passing Data", parameters);
+    }
+    protected void TalkToWPF()
+    {
+        AppState.MainWindow?.ShowMessageBox("Hey, this is Blazor Calling!");
     }
 }

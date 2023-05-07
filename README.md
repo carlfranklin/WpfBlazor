@@ -191,7 +191,7 @@ Now we can modify *MainWindow.xaml* to display the WebView as the main component
         xmlns:local="clr-namespace:WpfBlazor"
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         mc:Ignorable="d"
-        Title="WpfBlazor" Height="720" Width="1280">
+        Title="WpfBlazor" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
     <Grid>
         <blazor:BlazorWebView HostPage="wwwroot/index.html" Services="{DynamicResource services}">
             <blazor:BlazorWebView.RootComponents>
@@ -202,7 +202,7 @@ Now we can modify *MainWindow.xaml* to display the WebView as the main component
 </Window>
 ```
 
-We've added XAML namespaces for the local app (`local`) as well as the WebView (`blazor`), and set the `Title`, `Height`, and `Width` properties.
+We've added XAML namespaces for the local app (`local`) as well as the WebView (`blazor`), and set the `WindowStartupLocation`, `Title`, `Height`, and `Width` properties.
 
 In the `<Grid>` control, we've added the `BlazorWebView` component as the sole child. That guarantees us it will take up the whole window space.
 
@@ -330,7 +330,27 @@ Run the app. Resize the window, and click the button. It should look something l
 
 ### Clean up @using statements
 
-Add the following Razor Component to the project:
+Replace *App.xaml.cs* with the following:
+
+```c#
+global using Microsoft.JSInterop;
+global using Microsoft.AspNetCore.Components;
+using System.Windows;
+
+namespace WpfBlazor
+{
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
+    {
+    }
+}
+```
+
+We removed the unnecessary `using` statements add added two `global using` statements.
+
+Now add the following Razor Component to the project:
 
 *_Imports.razor*:
 
@@ -363,11 +383,27 @@ Now we can remove the @using statements from the Razor components:
 </div>
 ```
 
+*ChildComponent.razor.cs:*
+
+```c#
+namespace WpfBlazor.Components;
+
+public partial class ChildComponent : ComponentBase
+{
+    protected string Message { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Message = $"ChildComponent initialized at {DateTime.Now.ToLongTimeString()}";
+    }
+}
+```
+
 Run the app to make sure it still runs as before.
 
 ### Call C# from JavaScript
 
-Add the following to *wwwroot/index.html* at line 26:
+Add the following to *wwwroot/index.html* before the `</script>` tag at line 26:
 
 ```javascript
 var dotNetHelper;
@@ -391,8 +427,6 @@ The `RegisterWPFApp` method saves the component reference and adds the `resize` 
 Replace *Index.razor.cs* with the following:
 
 ```c#
-using Microsoft.JSInterop;
-
 namespace WpfBlazor;
 
 public partial class Index
@@ -434,88 +468,13 @@ Run the app and resize the window. Notice that as you resize, the Message
 
 ![image-20230420130011784](images/image-20230420130011784.png)
 
-### Clean up using statements in C# files
-
-We've added an *_Imports.razor* file to globalize the using statements used in Razor components, and now we'll do the same for the using statements in C# files.
-
-Replace *App.xaml.cs* with the following:
-
-```c#
-global using Microsoft.JSInterop;
-global using Microsoft.AspNetCore.Components;
-using System.Windows;
-
-namespace WpfBlazor;
-
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
-public partial class App : Application
-{
-}
-```
-
-We've added two global using statements at the top of the file.
-
-Now we can remove them from our code-behind files:
-
-*Index.razor.cs*:
-
-```c#
-namespace WpfBlazor;
-
-public partial class Index
-{
-    protected string Message { get; set; } = "Hey, it's Blazor in WPF!";
-
-    protected async Task ClickMe()
-    {
-        var width = await JSRuntime.InvokeAsync<int>("GetWindowWidth", null);
-        Message = $"Message updated at {DateTime.Now.ToLongTimeString()} Window Width: {width}";
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("RegisterWPFApp", DotNetObjectReference.Create(this));
-        }
-    }
-
-    [JSInvokable]
-    public async Task WindowResized(int Width, int Height)
-    {
-        Message = $"Screen Size: {Width} x {Height}";
-        await InvokeAsync(StateHasChanged);
-    }
-}
-```
-
-*ChildComponent.razor.cs*:
-
-```c#
-namespace WpfBlazor.Components;
-
-public partial class ChildComponent : ComponentBase
-{
-    protected string Message { get; set; } = string.Empty;
-
-    protected override void OnInitialized()
-    {
-        Message = $"ChildComponent initialized at {DateTime.Now.ToLongTimeString()}";
-    }
-}
-```
-
-Run the app to ensure it still works as before.
-
-### Add BootStrap .css files
+### Add BootStrap CSS files
 
 If you simply add bootstrap css files and link them in your *wwwroot/index.html* file the app will look more like a Blazor app, and you'll be able to take advantage of Bootstrap classes.
 
 If you don't have immediate access to bootstrap files, you can create a new Blazor WebAssembly app and copy *bootstrap.min.css* and *bootstrap.min.css.map* out of the *wwwroot/css* folder into our app's *wwwroot* folder.
 
-Add the following to *wwwroot/index.html* at line 10:
+Add the following to *wwwroot/index.html* before line 10:
 
 ```html
 <link href="bootstrap.min.css" rel="stylesheet" />
@@ -612,7 +571,7 @@ Add a button to *MainWindow.xaml*
         xmlns:local="clr-namespace:WpfBlazor"
         xmlns:blazor="clr-namespace:Microsoft.AspNetCore.Components.WebView.Wpf;assembly=Microsoft.AspNetCore.Components.WebView.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280">
+        Title="MainWindow" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35" />
@@ -635,7 +594,7 @@ Add a button to *MainWindow.xaml*
 
 All we did here is add another row to the grid, and in that row we placed a new button.
 
-Add the code-behind Click handler to *MainWindow.xaml.cs* at line 19:
+Add the code-behind Click handler to *MainWindow.xaml.cs* before line 19:
 
 ```c#
 private void Button_Click(object sender, RoutedEventArgs e)
@@ -676,7 +635,7 @@ After installing it, your *WpfBlazor.csproj* file should look like this (minus t
 </Project>
 ```
 
-Add the following to *wwwroot/index.html* at line 23:
+Add the following to *wwwroot/index.html* before line 23:
 
 ```html
 <script src="_content/Blazor.Extensions.Canvas/blazor.extensions.canvas.js"></script>
@@ -702,7 +661,7 @@ Add the following to *Index.razor* at line 9:
 <BECanvas Width="300" Height="400" @ref="_canvasReference"></BECanvas>
 ```
 
-Add the following to *Index.razor.cs* at line 5:
+Add the following to *Index.razor.cs* before line 5:
 
 ```c#
 private Canvas2DContext _context;
@@ -716,15 +675,16 @@ protected override async Task OnAfterRenderAsync(bool firstRender)
 {
     if (firstRender)
     {
-        await JSRuntime.InvokeVoidAsync("RegisterWPFApp", DotNetObjectReference.Create(this));
+        await JSRuntime.InvokeVoidAsync("RegisterWPFApp",
+           DotNetObjectReference.Create(this));
     }
-    this._context = await this._canvasReference.CreateCanvas2DAsync();
-    await this._context.SetFillStyleAsync("green");
+    _context = await _canvasReference.CreateCanvas2DAsync();
+    await _context.SetFillStyleAsync("green");
 
-    await this._context.FillRectAsync(10, 100, 100, 100);
+    await _context.FillRectAsync(10, 100, 100, 100);
 
-    await this._context.SetFontAsync("48px serif");
-    await this._context.StrokeTextAsync("Hello Blazor!!!", 10, 100);
+    await _context.SetFontAsync("48px serif");
+    await _context.StrokeTextAsync("Hello Blazor!!!", 10, 100);
 }
 ```
 
@@ -775,7 +735,7 @@ global using Blazored.Modal;
 global using Blazored.Modal.Services;
 ```
 
-Finally, we need to add the service in *MainPage.xaml.cs* on line 15:
+Finally, we need to add the service in *MainWindow.xaml.cs* before line 15:
 
 ```c#
 serviceCollection.AddBlazoredModal();
@@ -853,6 +813,8 @@ Run the app and press the **Show Modal** button. It should look like this:
 
 ### Call WPF Code from Blazor
 
+We've learned how to call Blazor code from a XAML interaction, now let's call C# code in a XAML code-behind from Blazor.
+
 Add the following property to *AppState.cs*:
 
 ```c#
@@ -906,7 +868,7 @@ That shares the `MainWindow` reference where it can be accessed by Blazor
 
 We also added a `ShowMessageBox` method that displays a WPF message box. This is what we will call from Blazor code.
 
-Add the following to *Index.razor* at line 12:
+Add the following to *Index.razor* before line 12:
 
 ```html
 <br />
